@@ -105,7 +105,7 @@ class LibraryServices {
               System.out.println("2. Book Author.");
               System.out.println("3. Date of Publication.");
               System.out.println("4. Confirm");
-              System.out.println("\nEnter your choice: ");
+              System.out.print("\nEnter your choice: ");
               updateStatus = scanner.nextInt();
               scanner.nextLine();
 
@@ -146,8 +146,6 @@ class LibraryServices {
 
   private void addPendingBook(String tempBookName, String tempAuthor, int tempBookPublished) {
 
-    
-
     try (BufferedWriter appendBook = new BufferedWriter(new FileWriter("libraryDatabase.txt"))) {
 
       dataArray.put(tempBookName, new OtherInfo(tempAuthor, tempBookPublished));
@@ -157,9 +155,7 @@ class LibraryServices {
 
         appendBook.write("Book Name: " + key + ", Author: " + values.tempAuthor + ", Date of Publication: " + values.tempBookPublished);
         appendBook.newLine();
-
       }
-
 
     } catch (IOException e) {
       System.out.println("\nFile Error: Failed to Append");
@@ -172,8 +168,8 @@ class LibraryServices {
       
       if (!dataArray.isEmpty()) {
 
-        String line = readStorage.readLine(); 
-        while(line != null) {
+        String line;
+        while( (line = readStorage.readLine()) != null) {
           int tempNum = 1;
           System.out.printf("%d. %s", tempNum, line);
           tempNum++;
@@ -190,7 +186,7 @@ class LibraryServices {
 
             System.out.println("\nDo you wish to remove the following book?");
             System.out.printf("\nBook Name: %s\nAuthor: %s\nDate of Publication: %d\n", tempRemove, dataArray.get(tempRemove).tempAuthor, dataArray.get(tempRemove).tempBookPublished);
-            System.out.println("Enter your choice [Y/N]: ");
+            System.out.print("Enter your choice [Y/N]: ");
             removeStatus = scanner.nextLine().toUpperCase();
 
             if (removeStatus.equals("Y")) {
@@ -199,11 +195,13 @@ class LibraryServices {
               System.out.println("\nProcess cancelled.");
             }
 
+          } else if (tempRemove.equals("Q") || tempRemove.equals("q")) {
+            System.out.println("\nReturned.");
           } else {
             System.out.println( "\nInvalid Book Name. Please try again!");
           }
 
-        } while (!tempRemove.equals("Q") && !dataArray.containsKey(tempRemove));
+        } while (!tempRemove.equals("Q") && !tempRemove.equals("q") && !dataArray.containsKey(tempRemove));
 
       } else {
         System.out.println("There is no book, please add a book to continue.");
@@ -213,6 +211,7 @@ class LibraryServices {
     }
  }
 }
+
 class OtherInfo {
 
   String tempAuthor;
